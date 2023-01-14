@@ -1,0 +1,24 @@
+<p>signin works!</p>
+<div>
+  <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+    <p>
+      Username <input type="text" formControlName="username" id="username">
+      <span *ngIf="signInForm.get('username')?.invalid && (signInForm.get('username')?.dirty || signInForm.get('username')?.touched)">
+        <span *ngIf="signInForm.get('username')?.errors?.['required']">
+          Username is required
+        </span>
+      </span>
+    </p>
+    <p>
+      Password <input type="password" formControlName="password">
+      <span *ngIf="signInForm.get('password')?.invalid && (signInForm.get('password')?.dirty || signInForm.get('password')?.touched)">
+        <span *ngIf="signInForm.get('password')?.errors?.['required']">
+          Password is required
+        </span>
+      </span>
+    </p>
+    <p>
+      <button type="submit">Submit</button>
+    </p>
+  </form>
+</div>

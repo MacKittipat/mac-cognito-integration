@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {CognitoUserAttribute, CognitoUserPool,} from 'amazon-cognito-identity-js';
+import {CognitoUserAttribute, CognitoUserPool} from 'amazon-cognito-identity-js';
 import {environment} from 'src/environments/environment';
 
 @Component({

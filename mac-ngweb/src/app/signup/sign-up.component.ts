@@ -27,6 +27,10 @@ export class SignUpComponent {
   }
 
   onSubmit() {
+    if(!this.signUpForm.valid) {
+      this.signUpForm.markAllAsTouched();
+      return;
+    }
     console.log(this.signUpForm.value);
     this.userPool.signUp(<string>this.signUpForm.value.username, <string>this.signUpForm.value.password,
       [new CognitoUserAttribute({Name: 'email', Value: <string>this.signUpForm.value.email})],

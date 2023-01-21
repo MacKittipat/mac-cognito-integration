@@ -8,6 +8,8 @@ import {AppComponent} from "./app.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { SignInComponent } from './compontents/signin/sign-in.component';
 import { ProfileComponent } from './compontents/profile/profile.component';
+import {HttpClientModule} from "@angular/common/http";
+import { ProductComponent } from './compontents/product/product.component';
 
 @NgModule({
   declarations: [
@@ -15,13 +17,15 @@ import { ProfileComponent } from './compontents/profile/profile.component';
     SignUpComponent,
     HomeComponent,
     SignInComponent,
-    ProfileComponent
+    ProfileComponent,
+    ProductComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

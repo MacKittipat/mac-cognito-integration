@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {AuthenticationDetails, CognitoUser} from "amazon-cognito-identity-js";
 import {AuthService} from "../../services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-signin',
@@ -15,7 +16,7 @@ export class SignInComponent {
     password: ['', Validators.required]
   });
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
   }
 
   onSubmit() {
@@ -33,7 +34,7 @@ export class SignInComponent {
     let cognitoUser = new CognitoUser(userData);
     cognitoUser.authenticateUser(authDetails, {
       onSuccess: (result) => {
-        console.log('Login success. ' + JSON.stringify(result))
+        console.log('Login success. ' + JSON.stringify(result));
       }, onFailure: (err) => {
         console.log(err.message || JSON.stringify(err));
       }

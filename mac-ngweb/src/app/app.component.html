@@ -5,4 +5,8 @@
     <li><a routerLink="signin">SignIn</a></li>
   </ul>
 </div>
+<p>
+  Welcome <b>{{username}}</b>
+  &nbsp;&nbsp;<button id="btnSignOut" (click)="signOut()">Sign Out</button>
+</p>
 <router-outlet></router-outlet>

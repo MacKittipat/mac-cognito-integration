@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from 'src/environments/environment';
 import {CognitoUser, CognitoUserPool} from "amazon-cognito-identity-js";
 
@@ -22,8 +22,18 @@ export class AuthService {
     return this.cognitoUserPool;
   }
 
-
-  // isLoggedIn(): boolean {
-  //   let cognitoUser = this.cognitoUserPool.getCurrentUser();
-  // }
+  isLoggedIn(): boolean {
+    let isValid = false;
+    let cognitoUser = this.cognitoUserPool.getCurrentUser();
+    if (cognitoUser) {
+      cognitoUser.getSession((error: Error, session: any) => {
+        if (error) {
+          console.log(`Error : ${JSON.stringify(error)}`)
+        } else {
+          isValid = session.isValid();
+        }
+      });
+    }
+    return isValid;
+  }
 }

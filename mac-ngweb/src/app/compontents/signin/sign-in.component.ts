@@ -35,6 +35,7 @@ export class SignInComponent {
     cognitoUser.authenticateUser(authDetails, {
       onSuccess: (result) => {
         console.log('Login success. ' + JSON.stringify(result));
+        this.router.navigate(['profile']);
       }, onFailure: (err) => {
         console.log(err.message || JSON.stringify(err));
       }

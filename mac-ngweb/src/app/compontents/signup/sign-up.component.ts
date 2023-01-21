@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {CognitoUserAttribute, CognitoUserPool} from 'amazon-cognito-identity-js';
-import {environment} from 'src/environments/environment';
+import {CognitoUserAttribute} from 'amazon-cognito-identity-js';
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-signup',
@@ -16,23 +16,17 @@ export class SignUpComponent {
     password: ['', Validators.required]
   });
 
-  userPool: CognitoUserPool;
-
-  constructor(private fb: FormBuilder) {
-    let cognitoPoolData = {
-      UserPoolId: environment.cognitoUserPoolId,
-      ClientId: environment.cognitoAppClientId,
-    };
-    this.userPool = new CognitoUserPool(cognitoPoolData);
+  constructor(private fb: FormBuilder, private authService: AuthService) {
   }
 
   onSubmit() {
-    if(!this.signUpForm.valid) {
+    if (!this.signUpForm.valid) {
       this.signUpForm.markAllAsTouched();
       return;
     }
     console.log(this.signUpForm.value);
-    this.userPool.signUp(<string>this.signUpForm.value.username, <string>this.signUpForm.value.password,
+    this.authService.getCognitoUserPool().signUp(
+      <string>this.signUpForm.value.username, <string>this.signUpForm.value.password,
       [new CognitoUserAttribute({Name: 'email', Value: <string>this.signUpForm.value.email})],
       [],
       (err, result) => {

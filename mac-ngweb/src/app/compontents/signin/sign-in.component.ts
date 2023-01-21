@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
-import {AuthenticationDetails, CognitoUser, CognitoUserPool} from "amazon-cognito-identity-js";
-import {environment} from 'src/environments/environment';
+import {AuthenticationDetails, CognitoUser} from "amazon-cognito-identity-js";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-signin',
@@ -15,18 +15,11 @@ export class SignInComponent {
     password: ['', Validators.required]
   });
 
-  userPool: CognitoUserPool;
-
-  constructor(private fb: FormBuilder) {
-    let cognitoPoolData = {
-      UserPoolId: environment.cognitoUserPoolId,
-      ClientId: environment.cognitoAppClientId,
-    };
-    this.userPool = new CognitoUserPool(cognitoPoolData);
+  constructor(private fb: FormBuilder, private authService: AuthService) {
   }
 
   onSubmit() {
-    if(!this.signInForm.valid) {
+    if (!this.signInForm.valid) {
       this.signInForm.markAllAsTouched();
       return;
     }
@@ -34,9 +27,9 @@ export class SignInComponent {
     let authDetails = new AuthenticationDetails({
       Username: this.signInForm.value.username || '',
       Password: this.signInForm.value.password || ''
-    })
+    });
 
-    let userData = {Username: this.signInForm.value.username || '', Pool: this.userPool};
+    let userData = {Username: this.signInForm.value.username || '', Pool: this.authService.getCognitoUserPool()};
     let cognitoUser = new CognitoUser(userData);
     cognitoUser.authenticateUser(authDetails, {
       onSuccess: (result) => {

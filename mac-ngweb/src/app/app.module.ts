@@ -8,8 +8,9 @@ import {AppComponent} from "./app.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { SignInComponent } from './compontents/signin/sign-in.component';
 import { ProfileComponent } from './compontents/profile/profile.component';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { ProductComponent } from './compontents/product/product.component';
+import {HttpClientInterceptor} from "./interceptors/HttpClientInterceptor";
 
 @NgModule({
   declarations: [
@@ -27,7 +28,13 @@ import { ProductComponent } from './compontents/product/product.component';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpClientInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

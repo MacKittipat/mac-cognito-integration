@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {CognitoUserAttribute} from 'amazon-cognito-identity-js';
 import {AuthService} from "../../services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-signup',
@@ -16,7 +17,7 @@ export class SignUpComponent {
     password: ['', Validators.required]
   });
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
   }
 
   onSubmit() {
@@ -37,7 +38,8 @@ export class SignUpComponent {
         if (result) {
           console.log('User ' + result.user.getUsername() + ' is registered into Cognito');
         }
-        console.log('Completed SignUp')
+        console.log('Completed SignUp');
+        this.router.navigate(['signin']);
       });
   }
 

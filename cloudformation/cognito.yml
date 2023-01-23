@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  CognitoIdentifier:
+    Type: String
+    Default: https://localhost
+
+Resources:
+
+  # Cognito
+  MacUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: MacUserPool
+      MfaConfiguration: "OFF"
+      AccountRecoverySetting: 
+        RecoveryMechanisms: 
+          - Name: verified_email
+            Priority: 1
+      EmailConfiguration:
+        EmailSendingAccount: COGNITO_DEFAULT
+      UsernameConfiguration: 
+        CaseSensitive: False
+      AliasAttributes: 
+        - email
+        - preferred_username
+
+  MacUserPoolResourceServer:
+    Type: AWS::Cognito::UserPoolResourceServer
+    Properties:
+      UserPoolId: !Ref MacUserPool
+      Identifier: !Ref CognitoIdentifier
+      Name: "MacApi"
+
+  MacUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: "MacApp"
+      SupportedIdentityProviders:
+        - COGNITO
+      UserPoolId: !Ref MacUserPool
+    DependsOn: MacUserPoolResourceServer
+
+Outputs: 
+  CognitoUserPoolId:
+    Value: !Ref MacUserPool
+  CognitoClientId:
+    Value: !Ref MacUserPoolClient

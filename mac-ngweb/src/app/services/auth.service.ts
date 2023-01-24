@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {environment} from 'src/environments/environment';
 import {CognitoUser, CognitoUserPool} from "amazon-cognito-identity-js";
+import {Subject, Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ import {CognitoUser, CognitoUserPool} from "amazon-cognito-identity-js";
 export class AuthService {
 
   private readonly cognitoUserPool: CognitoUserPool;
+  private loggedInUser = new Subject<any>();
 
   constructor() {
     let cognitoPoolData = {
@@ -15,7 +17,6 @@ export class AuthService {
       ClientId: environment.cognitoAppClientId,
     };
     this.cognitoUserPool = new CognitoUserPool(cognitoPoolData);
-
   }
 
   getCognitoUserPool(): CognitoUserPool {
@@ -35,5 +36,13 @@ export class AuthService {
       });
     }
     return isValid;
+  }
+
+  setLoggedInUser(loggedInUser: CognitoUser | null) {
+    this.loggedInUser.next(loggedInUser);
+  }
+
+  getLoggedInUser(): Observable<any> {
+    return this.loggedInUser.asObservable();
   }
 }

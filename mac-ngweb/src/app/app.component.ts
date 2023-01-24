@@ -15,13 +15,18 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.getLoggedInUser().subscribe((loggedInUser) => {
+      this.username = loggedInUser?.getUsername();
+      console.log('Updating username');
+    });
+
     this.username = this.authService.getCognitoUserPool().getCurrentUser()?.getUsername();
-    console.log(`User already loggedIn = ${this.authService.isLoggedIn()}`);
   }
 
   signOut() {
     console.log('Signing Out ...');
     this.authService.getCognitoUserPool().getCurrentUser()?.signOut();
+    this.authService.setLoggedInUser(null);
     this.router.navigate(['']);
   }
 

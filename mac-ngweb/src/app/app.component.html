@@ -9,6 +9,6 @@
 </div>
 <p>
   Welcome <b>{{username}}</b>
-  &nbsp;&nbsp;<button id="btnSignOut" (click)="signOut()">Sign Out</button>
+  &nbsp;&nbsp;<button id="btnSignOut" (click)="signOut()" *ngIf="username">Sign Out</button>
 </p>
 <router-outlet></router-outlet>

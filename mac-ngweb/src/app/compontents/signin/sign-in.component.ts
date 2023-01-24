@@ -33,8 +33,9 @@ export class SignInComponent {
     let userData = {Username: this.signInForm.value.username || '', Pool: this.authService.getCognitoUserPool()};
     let cognitoUser = new CognitoUser(userData);
     cognitoUser.authenticateUser(authDetails, {
-      onSuccess: (result) => {
-        console.log('Login success. ' + JSON.stringify(result));
+      onSuccess: (session) => {
+        console.log('Login success. ' + JSON.stringify(session));
+        this.authService.setLoggedInUser(this.authService.getCognitoUserPool().getCurrentUser());
         this.router.navigate(['profile']);
       }, onFailure: (err) => {
         console.log(err.message || JSON.stringify(err));

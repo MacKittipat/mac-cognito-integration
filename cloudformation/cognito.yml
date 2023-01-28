@@ -4,10 +4,15 @@ Parameters:
   CognitoIdentifier:
     Type: String
     Default: https://localhost
+  CognitoUserPoolDomain:
+    Type: String
+    Default: macweb
+  CognitoUserPoolScope:
+      Type: String
+      Default: macall
 
 Resources:
 
-  # Cognito
   MacUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
@@ -31,18 +36,43 @@ Resources:
       UserPoolId: !Ref MacUserPool
       Identifier: !Ref CognitoIdentifier
       Name: "MacApi"
+      Scopes: 
+        - ScopeName: !Sub '${CognitoUserPoolScope}'
+          ScopeDescription: !Sub '${CognitoUserPoolScope}'
 
-  MacUserPoolClient:
+  MacUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      UserPoolId: !Ref MacUserPool
+      Domain: !Ref CognitoUserPoolDomain
+
+  MacUserPoolWebClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
-      ClientName: "MacApp"
+      ClientName: "MacWebClient"
       SupportedIdentityProviders:
         - COGNITO
       UserPoolId: !Ref MacUserPool
     DependsOn: MacUserPoolResourceServer
 
+  MacUserPoolApiClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: "MacApiClient"
+      SupportedIdentityProviders:
+        - COGNITO
+      UserPoolId: !Ref MacUserPool
+      AllowedOAuthFlows: 
+        - client_credentials
+      AllowedOAuthScopes: 
+        - !Sub '${CognitoIdentifier}/${CognitoUserPoolScope}'
+      GenerateSecret: True
+    DependsOn: MacUserPoolResourceServer
+
 Outputs: 
   CognitoUserPoolId:
     Value: !Ref MacUserPool
-  CognitoClientId:
-    Value: !Ref MacUserPoolClient
+  CognitoWebClientId:
+    Value: !Ref MacUserPoolWebClient
+  CognitoApiClientId:
+    Value: !Ref MacUserPoolApiClient
